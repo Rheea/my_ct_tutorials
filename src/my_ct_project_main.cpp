@@ -31,5 +31,6 @@ int main(int argc, char** argv)
     integrator.integrate_n_steps(x, t0, nSteps, dt);
     // print the new state
     std::cout << "state after integration:: " << x.transpose() << std::endl;
+
     return 1;
 }

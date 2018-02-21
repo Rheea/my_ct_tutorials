@@ -355,6 +355,8 @@ endif(HPIPM)
 add_executable(${PROJECT_NAME}_node src/my_ct_project_main.cpp)
 add_executable(${PROJECT_NAME}_controller_node src/my_ct_controller_main.cpp)
 add_executable(${PROJECT_NAME}_hyqtest_node src/my_ct_project_HyQ_test.cpp)
+add_executable(${PROJECT_NAME}_hyatest_node src/my_ct_project_HyA_test.cpp)
+
 
 if(HPIPM)
  add_executable(${PROJECT_NAME}_NLOC_node src/my_NLOC_generalConstrained.cpp)
