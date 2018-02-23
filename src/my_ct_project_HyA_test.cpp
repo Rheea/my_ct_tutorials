@@ -5,7 +5,16 @@
 #include <ct/rbd/systems/FixBaseFDSystem.h>
 #include <ct/rbd/systems/FloatingBaseFDSystem.h>
 #include <ct/models/InvertedPendulum/InvertedPendulum.h>
-// #include <ct/models/HyA/codegen/HyALinearizedForward.h>
+
+#include <ct/models/HyA/codegen/HyALinearizedForward.h>
+#include <ct/models/HyA/codegen/HyALinearizedReverse.h>
+
+#include <ct/models/HyA/codegen/HyAInverseDynJacForward.h>
+#include <ct/models/HyA/codegen/HyAInverseDynJacReverse.h>
+
+#include "my_ct_project/HyAUrdfNames.h"
+#include "my_ct_project/HyAJointLimits.h"
+
 #include <ct/optcon/optcon.h>
 #include <ct/rbd/rbd.h>
 #include <ct/models/CodegenOutputDirs.h>
@@ -22,6 +31,8 @@
 
 using namespace ct;
 using namespace ct::rbd;
+// using namespace ct::models::HyA;
+
 
 /*HyA Linearisation*/
 
@@ -34,7 +45,6 @@ int main(int argc, char** argv)
 
 	// create an instance of the system
 	std::shared_ptr<ct::core::System<NSTATE>> dynamics(new ct::rbd::FixBaseFDSystem<ct::rbd::HyA::Dynamics>);
-
 	ct::core::Integrator<NSTATE> integrator(dynamics, ct::core::IntegrationType::RK4);
 
 	ct ::core::StateVector<NSTATE> state;
@@ -57,10 +67,13 @@ int main(int argc, char** argv)
 
     std::shared_ptr<HyASystem> hyaSystem(new HyASystem);
     std::shared_ptr<HyASystem> hyaSystem2(new HyASystem);
+    // std::shared_ptr<HyASystem> hyaSystem3(new HyASystem);
+
 
     RbdLinearizer<HyASystem> rbdLinearizer(hyaSystem, true);
     core::SystemLinearizer<STATE_DIM, CONTROL_DIM> systemLinearizer(hyaSystem2, true);
-    // ct::models::HyA::HyALinearizedForward hyaLinear;
+    ct::models::HyA::HyALinearizedForward hyaLinear;
+
 
 
     core::StateVector<STATE_DIM> x;
@@ -72,9 +85,12 @@ int main(int argc, char** argv)
     auto A_rbd = rbdLinearizer.getDerivativeState(x, u, 1.0);
     auto B_rbd = rbdLinearizer.getDerivativeControl(x, u, 1.0);
 
+
     // HyaLinearizerTest
     auto A_system = systemLinearizer.getDerivativeState(x, u, 1.0);
     auto B_system = systemLinearizer.getDerivativeControl(x, u, 1.0);
+
+    auto A_gen = hyaLinear.getDerivativeState(x, u);
 
     // auto A_gen = hyaLinear.getDerivativeState(x, u, 0.0);
     // auto B_gen = hyaLinear.getDerivativeControl(x, u, 0.0);
