@@ -1,0 +1,22 @@
+termLQR
+{
+    name "state cost quadratic"
+    kind "quadratic"   
+    type 0              ; 0 = intermediate, 1 = final
+
+    weights
+    {
+      Q
+      {
+        scaling 1.0
+        (0,0) 2.6
+        (1,1) 1.0
+      }
+      R
+      {
+        scaling 1.0
+        (0,0) 1.0 1.0 1.0 
+        (1,1) 1.0 2.0 1.0
+      }
+    }
+}
