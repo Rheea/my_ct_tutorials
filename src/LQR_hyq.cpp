@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 
     // std::cout << "A: " << std::endl << A << std::endl << std::endl;
     // std::cout << "B: " << std::endl << B << std::endl << std::endl;
-    // std::cout << "Q: " << std::endl << Q << std::endl << std::endl;
+    std::cout << "Q: " << std::endl << Q << std::endl << std::endl;
     std::cout << "R: " << std::endl << R << std::endl << std::endl;
 
     // lqrSolver.compute(Q, R, A, B, K);
