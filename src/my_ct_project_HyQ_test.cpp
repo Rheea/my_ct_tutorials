@@ -20,9 +20,12 @@
 
 /*HyQ Linearisation*/
 
+#include <ct/models/HyQ/codegen/HyQWithContactModelLinearizedForward.h>
 
 using namespace ct;
 using namespace ct::rbd;
+using namespace ct::models::HyQ;
+
 
 int main(int argc, char** argv)
 
@@ -59,8 +62,8 @@ int main(int argc, char** argv)
     std::shared_ptr<HyQSystem> hyqSystem2(new HyQSystem);
 
     RbdLinearizer<HyQSystem> rbdLinearizer(hyqSystem, true);
-    // core::SystemLinearizer<STATE_DIM, CONTROL_DIM> systemLinearizer(hyqSystem2, true);
-    // ct::models::HyA::HyALinearizedForward hyaLinear;
+    core::SystemLinearizer<STATE_DIM, CONTROL_DIM> systemLinearizer(hyqSystem2, true);
+    ct::models::HyQ::HyQWithContactModelLinearizedForward hyqLinear;
 
     std::cout << "Testing linearisation (rbdl and system lineariser): " << std::endl;
 
@@ -74,20 +77,20 @@ int main(int argc, char** argv)
     auto B_rbd = rbdLinearizer.getDerivativeControl(x, u, 1.0);
 
     // HyaLinearizerTest
-    // auto A_system = systemLinearizer.getDerivativeState(x, u, 1.0);
-    // auto B_system = systemLinearizer.getDerivativeControl(x, u, 1.0);
+    auto A_system = systemLinearizer.getDerivativeState(x, u, 1.0);
+    auto B_system = systemLinearizer.getDerivativeControl(x, u, 1.0);
 
-    // auto A_gen = hyaLinear.getDerivativeState(x, u, 0.0);
-    // auto B_gen = hyaLinear.getDerivativeControl(x, u, 0.0);
+    auto A_gen = hyqLinear.getDerivativeState(x, u, 0.0);
+    auto B_gen = hyqLinear.getDerivativeControl(x, u, 0.0);
 
 
     std::cout << "A_rbd: " << std::endl << A_rbd << std::endl << std::endl;
-    // std::cout << "A_system: " << std::endl << A_system << std::endl << std::endl;
-    // std::cout << "A_gen: " << std::endl << A_system << std::endl << std::endl;
+    std::cout << "A_system: " << std::endl << A_system << std::endl << std::endl;
+    std::cout << "A_gen: " << std::endl << A_system << std::endl << std::endl;
 
     std::cout << "B_rbd: " << std::endl << B_rbd << std::endl << std::endl;
-    // std::cout << "B_system: " << std::endl << B_system << std::endl << std::endl;
-    // std::cout << "B_gen: " << std::endl << B_rbd << std::endl << std::endl;
+    std::cout << "B_system: " << std::endl << B_system << std::endl << std::endl;
+    std::cout << "B_gen: " << std::endl << B_rbd << std::endl << std::endl;
 
 
 	return 1;

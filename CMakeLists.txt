@@ -323,6 +323,7 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
+  ${ct_model_libs}
 )
 
 
@@ -344,7 +345,7 @@ endif(HPIPM)
 # )
 
 ## Add cmake target dependencies of the library
-## as an example, code may need to be generated before libraries
+## as an example, code may need to be generated bpkg_check_modules(libcmaes REQUIRED libcmaes)efore libraries
 ## either from message generation or dynamic reconfigure
 # add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
@@ -357,6 +358,8 @@ add_executable(${PROJECT_NAME}_controller_node src/my_ct_controller_main.cpp)
 add_executable(${PROJECT_NAME}_hyqtest_node src/my_ct_project_HyQ_test.cpp)
 add_executable(${PROJECT_NAME}_hyatest_node src/my_ct_project_HyA_test.cpp)
 
+target_link_libraries(${PROJECT_NAME}_hyatest_node ${ct_model_libs} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_hyqtest_node ${ct_model_libs} ${catkin_LIBRARIES})
 
 if(HPIPM)
  add_executable(${PROJECT_NAME}_NLOC_node src/my_NLOC_generalConstrained.cpp)
