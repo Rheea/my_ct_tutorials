@@ -250,6 +250,18 @@ endif()
 
 option(HPIPM "Compile with HPIPM support" ON)
 
+## lapack libs
+set(LAPACK_LIBS "")
+find_package(LAPACK QUIET)
+if(LAPACK_FOUND)
+    message(STATUS "Found LAPACK library")
+    set(LAPACK_LIBS lapack)
+    add_definitions (-DCT_USE_LAPACK)
+    set(USE_LAPACK ON)
+else(LAPACK_FOUND)
+    message(WARNING "Could not find LAPACK library")
+endif(LAPACK_FOUND)
+
 ## dummy HPIPM libs
 set(HPIPM_LIBS "")
 
@@ -317,6 +329,9 @@ catkin_package(
 ###########
 ## Build ##
 ###########
+if(USE_LAPACK)
+    ct_link_external_library(${LAPACK_LIBS})
+endif(USE_LAPACK)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
@@ -324,6 +339,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${ct_model_libs}
+  ${LAPACK_LIBS}
 )
 
 
@@ -358,8 +374,11 @@ add_executable(${PROJECT_NAME}_controller_node src/my_ct_controller_main.cpp)
 add_executable(${PROJECT_NAME}_hyqtest_node src/my_ct_project_HyQ_test.cpp)
 add_executable(${PROJECT_NAME}_hyatest_node src/my_ct_project_HyA_test.cpp)
 
+add_executable(${PROJECT_NAME}_hyqlqr_node src/LQR_hyq.cpp)
+
 target_link_libraries(${PROJECT_NAME}_hyatest_node ${ct_model_libs} ${catkin_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}_hyqtest_node ${ct_model_libs} ${catkin_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_hyqlqr_node  ${LAPACK_LIBS} ${ct_model_libs} ${catkin_LIBRARIES})
 
 if(HPIPM)
  add_executable(${PROJECT_NAME}_NLOC_node src/my_NLOC_generalConstrained.cpp)
