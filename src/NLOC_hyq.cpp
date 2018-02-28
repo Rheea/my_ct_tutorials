@@ -102,10 +102,10 @@ int main(int argc, char** argv)
 	 * modify only a few settings, for more detail, check out the NLOptConSettings class. */
     ct::optcon::NLOptConSettings ilqr_settings;
     ilqr_settings.dt = 0.01;  // the control discretization in [sec]
-    ilqr_settings.integrator = ct::core::IntegrationType::EULERCT;
-    ilqr_settings.discretization = ct::optcon::NLOptConSettings::APPROXIMATION::FORWARD_EULER;
+    ilqr_settings.integrator = ct::core::IntegrationType::EULER_SYM;
+    ilqr_settings.discretization = ct::optcon::NLOptConSettings::APPROXIMATION::SYMPLECTIC_EULER;
     ilqr_settings.max_iterations = 10;
-    ilqr_settings.nThreads = 4;  // use multi-threading
+    ilqr_settings.nThreads = 1;  // use multi-threading
     ilqr_settings.nlocp_algorithm = ct::optcon::NLOptConSettings::NLOCP_ALGORITHM::ILQR;
     ilqr_settings.lqocp_solver =
         ct::optcon::NLOptConSettings::LQOCP_SOLVER::GNRICCATI_SOLVER;  // solve LQ-problems using custom Riccati solver
