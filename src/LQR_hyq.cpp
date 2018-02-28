@@ -79,14 +79,14 @@ int main(int argc, char** argv)
     ct::optcon::LQR<STATE_DIM, CONTROL_DIM> lqrSolver;
     ct::core::FeedbackMatrix<STATE_DIM, CONTROL_DIM> K;
 
-    // std::cout << "A: " << std::endl << A << std::endl << std::endl;
-    // std::cout << "B: " << std::endl << B << std::endl << std::endl;
+    std::cout << "A: " << std::endl << A << std::endl << std::endl;
+    std::cout << "B: " << std::endl << B << std::endl << std::endl;
     std::cout << "Q: " << std::endl << Q << std::endl << std::endl;
     std::cout << "R: " << std::endl << R << std::endl << std::endl;
 
-    // lqrSolver.compute(Q, R, A, B, K);
+    lqrSolver.compute(Q, R, A, B, K);
 
-    // std::cout << "LQR gain matrix:" << std::endl << K << std::endl;
+    std::cout << "LQR gain matrix:" << std::endl << K << std::endl;
 
     return 1;
 }

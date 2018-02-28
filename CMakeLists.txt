@@ -265,6 +265,19 @@ endif(LAPACK_FOUND)
 ## dummy HPIPM libs
 set(HPIPM_LIBS "")
 
+
+if(MATLAB)
+    message(STATUS "MATLAB support ON")
+    find_package(matlab_cpp_interface REQUIRED)
+    if(matlab_cpp_interface_FOUND)
+        include_directories(${matlab_cpp_interface_INCLUDE_DIRS})
+        set(MATLAB_LIB_DIR ${matlab_cpp_interface_LIBRARIES})
+        add_definitions( -DMATLAB )
+    endif()
+endif(MATLAB)
+set(MATLAB_LIBS ${MATLAB_LIB_DIR})
+
+
 ## include BLASFEO AND HPIPM
 if(HPIPM)
     message(STATUS "Switching HPIPM ON")
@@ -298,10 +311,10 @@ if(HPIPM)
 endif(HPIPM)
 
 
-message(${BLASFEO_DIR})
-message(${HPIPM_DIR})
-message(${HPIPM_INCLUDE_DIR}
-        ${BLASFEO_INCLUDE_DIR})
+#message(${BLASFEO_DIR})
+#message(${HPIPM_DIR})
+#message(${HPIPM_INCLUDE_DIR}
+#        ${BLASFEO_INCLUDE_DIR})
 #######################################################################################
 
 
@@ -340,6 +353,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${ct_model_libs}
   ${LAPACK_LIBS}
+
 )
 
 
@@ -376,13 +390,17 @@ add_executable(${PROJECT_NAME}_hyatest_node src/my_ct_project_HyA_test.cpp)
 
 add_executable(${PROJECT_NAME}_hyqlqr_node src/LQR_hyq.cpp)
 
+
 target_link_libraries(${PROJECT_NAME}_hyatest_node ${ct_model_libs} ${catkin_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}_hyqtest_node ${ct_model_libs} ${catkin_LIBRARIES})
 target_link_libraries(${PROJECT_NAME}_hyqlqr_node  ${LAPACK_LIBS} ${ct_model_libs} ${catkin_LIBRARIES})
 
+
 if(HPIPM)
  add_executable(${PROJECT_NAME}_NLOC_node src/my_NLOC_generalConstrained.cpp)
 # target_link_libraries(my_NLOC_generalConstrained ${catkin_LIBRARIES} ${HPIPM_LIBS})
+ add_executable(${PROJECT_NAME}_hyqnloc_node src/NLOC_hyq.cpp)
+ target_link_libraries(${PROJECT_NAME}_hyqnloc_node ${LAPACK_LIBS} ${ct_model_libs} ${catkin_LIBRARIES} ${HPIPM_LIBS} ${MATLAB_LIB_DIR})
 endif(HPIPM)
 
 ## Rename C++ executable without prefix
